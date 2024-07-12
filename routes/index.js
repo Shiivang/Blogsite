@@ -1,17 +1,21 @@
 var express = require('express');
+const { Homepage, Loginpage, Registerpage, Profilepage } = require('../controllers/indexCont');
 var router = express.Router();
 
+function isLoggedin(req, res, next) {
+  if (req.isAuthenticated()) {
+      return next();
+  }
+  res.redirect('/login');
+};
+ 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index');
-});
+router.get('/', Homepage);
 
-router.get('/login', function(req, res, next) {
-  res.render('login');
-});
+router.get('/login',Loginpage);
 
-router.get('/register', function(req, res, next) {
-  res.render('register');
-});
+router.get('/register',Registerpage);
+
+router.get('/profile',isLoggedin,Profilepage);
 
 module.exports = router;
