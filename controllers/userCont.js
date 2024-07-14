@@ -1,6 +1,7 @@
 
 const passport = require("passport");
 const userModel = require("../models/userSchema");
+const blogModel = require("../models/BlogsSchema");
 
 const localStrategy = require("passport-local");
 passport.use(new localStrategy(userModel.authenticate()));
@@ -40,3 +41,24 @@ exports.Logout = async (req,res,next)=>{
         console.log(error);
     }
 };
+
+exports.CreateBlogs = async (req,res,next) => {
+    try {
+        const newBlog = await blogModel({
+            title : req.body.title ,
+            desc : req.body.desc ,
+            blogImage : req.body.blogImage ,
+            user : req.user._id ,
+        })
+
+        req.user.blogs.push(newBlog._id)
+
+        await newBlog.save();
+       
+        await req.user.save()
+
+        res.redirect("/blogs")
+    } catch (error) {
+        console.log(error);
+    }
+}
