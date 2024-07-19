@@ -1,0 +1,55 @@
+<%- include("./parsial/header") %>
+
+
+<div class="bg-white relative items-center w-full px-5 py-12 mx-auto md:px-12 lg:px-20 max-w-7xl">
+    <div class="w-full max-w-md mx-auto md:max-w-sm md:px-0 md:w-96 sm:px-4">
+      <div class="flex flex-col">
+        <div>
+          <h2 class="text-4xl text-black">Update-Profile</h2>
+        </div>
+      </div>
+      <div class="w-28 h-28 bg-blue-700 mt-8 rounded-full border-4 border-slate-50  object-cover overflow-hidden">
+        <img class="w-full h-full object-cover  " src="<%= user.profileImg %>" alt="">
+    </div>
+      <form action="/users/update-profile/<%= user._id %>" method="post" enctype="multipart/form-data"> 
+        <div class="mt-4 space-y-6">
+
+            <div class="col-span-full">
+                <label class="block mb-3 text-sm font-medium text-gray-600"> Profile Pic   </label>
+                <input type="file" name="avatar"  class="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm">
+              </div>
+       
+          <div class="col-span-full">
+            <button type="submit" class="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black"> Update image </button>
+          </div>
+        </div>
+      </form> <hr>
+      <form action="/users/update-profile-data/<%= user._id %>" method="post" > 
+        <div class="mt-4 space-y-6">
+
+           
+          <div class="col-span-full">
+              <label class="block mb-3 text-sm font-medium text-gray-600"> Username   </label>
+              <input type="text" placeholder="Username" value="<%= user.username %>" name="username" class="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm">
+            </div>
+            <div class="col-span-full">
+                <label class="block mb-3 text-sm font-medium text-gray-600"> fullname </label>
+                <input type="text" placeholder="Fullname" value="<%= user.fullname %>" name="fullname" class="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm">
+              </div>
+              <div class="col-span-full">
+                <label class="block mb-3 text-sm font-medium text-gray-600"> Email   </label>
+                <input type="text" placeholder="Email" value="<%= user.email %>" name="email" class="block w-full px-6 py-3 text-black bg-white border border-gray-200 rounded-full appearance-none placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm">
+              </div>
+       
+         
+          <div class="col-span-full">
+            <button type="submit" class="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none focus-visible:outline-black text-sm focus-visible:ring-black"> Update-data </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+<%- include("./parsial/footer") %>

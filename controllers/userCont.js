@@ -3,7 +3,12 @@ const passport = require("passport");
 const userModel = require("../models/userSchema");
 const blogModel = require("../models/BlogsSchema");
 
+
 const localStrategy = require("passport-local");
+
+const imagekit = require("../utils/imagekit");
+const commentModel = require("../models/commentSchema");
+
 passport.use(new localStrategy(userModel.authenticate()));
 
 
@@ -57,8 +62,88 @@ exports.CreateBlogs = async (req,res,next) => {
        
         await req.user.save()
 
-        res.redirect("/blogs")
+        res.redirect("/")
     } catch (error) {
         console.log(error);
+    }
+};
+
+exports.UpdateBlog = async (req,res,next) =>{
+    try {
+
+        const updateBlog = await blogModel.findByIdAndUpdate(req.params.id , req.body) ;
+
+        await updateBlog.save();
+        res.redirect("/profile");
+        
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+exports.DeleteBlog = async (req,res,next)=>{
+    try {
+        const deleteBlog = await blogModel.findByIdAndDelete(req.params.id);
+        res.redirect("/profile");
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+exports.profileUpdate = async (req,res,next)=>{
+    try {
+
+        const user = await userModel.findById(req.params.id);
+       
+       
+
+        if (!user) {
+            res.send("user not found");
+          }
+      
+        const { fileId, url, thumbnailUrl } = await imagekit.upload({
+          file: req.files.avatar.data,
+          fileName: req.files.avatar.name,
+        });
+      
+       
+        if (!url) {
+    res.send("their is some error while genrating url through imagekit");
+  }
+        user.profileImg = url;
+        await user.save();
+        res.render("update-profile", { user });
+        
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+exports.profileUpdatedata =  async (req,res,next)=>{ 
+    try {
+        const user = await userModel.findByIdAndUpdate(req.params.id,req.body);
+        await user.save()
+        res.redirect("/profile");
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+exports.Comment = async (req,res,next)=>{
+    try {
+
+        const newComment = await new commentModel({
+            commentText: req.body.comment,
+            postedBy: req.user._id,
+            blogId:req.params.id
+        })
+        await newComment.save();
+
+        const currentBlog = await blogModel.findByIdAndUpdate(req.params.id,({$push:{comments:newComment._id}}));
+        await currentBlog.save();
+        res.redirect(`/readblogs/${req.params.id}`)
+        
+    } catch (error) {
+        console.log(error)
     }
 }

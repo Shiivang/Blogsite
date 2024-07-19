@@ -5,11 +5,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
 require("./models/connection").DBconnection()
 
 const passport = require("passport");
 const session = require("express-session");
 const user = require("./models/userSchema");
+const expressFileupload = require("express-fileupload");
+
 
 
 var indexRouter = require('./routes/index');
@@ -20,6 +23,8 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(expressFileupload())
 
 app.use(session({
   resave : false ,
